@@ -2471,7 +2471,8 @@ class RenderRadialAxisWidget extends RenderBox {
     if (_actualMajorTickLength > 0 && majorTickThickness > 0) {
       final Paint tickPaint = Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = majorTickThickness;
+        ..strokeWidth = majorTickThickness
+        ..strokeCap = StrokeCap.round;
       for (int i = 0; i < length; i++) {
         final TickOffset tickOffset = _majorTickOffsets[i];
         if (!(i == 0 && _sweepAngle == 360)) {
