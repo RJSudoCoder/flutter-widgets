@@ -2531,7 +2531,9 @@ class RenderRadialAxisWidget extends RenderBox {
     if (_actualMinorTickLength > 0 && minorTickThickness > 0) {
       final Paint tickPaint = Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = minorTickThickness;
+        ..strokeWidth = minorTickThickness
+      ..strokeCap = StrokeCap.round
+      ;
       for (int i = 0; i < length; i++) {
         final TickOffset tickOffset = _minorTickOffsets[i];
         tickPaint.color = useRangeColorForAxis
