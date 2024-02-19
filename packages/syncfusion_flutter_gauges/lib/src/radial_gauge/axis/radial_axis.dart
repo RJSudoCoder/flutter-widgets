@@ -74,6 +74,8 @@ class RadialAxis extends StatefulWidget {
       this.ticksPosition = ElementsPosition.inside,
       this.labelsPosition = ElementsPosition.inside,
       this.offsetUnit = GaugeSizeUnit.logicalPixel,
+        this.visibleLabelsList,
+        this.visibleTickList,
       GaugeTextStyle? axisLabelStyle,
       AxisLineStyle? axisLineStyle,
       MajorTickStyle? majorTickStyle,
@@ -829,6 +831,10 @@ class RadialAxis extends StatefulWidget {
   /// ```
   // ignore: strict_raw_type
   final GaugeAxisRendererFactory? onCreateAxisRenderer;
+
+
+  final List<num>? visibleLabelsList;
+  final List<num>? visibleTickList;
 
   @override
   State<StatefulWidget> createState() => _RadialAxisState();

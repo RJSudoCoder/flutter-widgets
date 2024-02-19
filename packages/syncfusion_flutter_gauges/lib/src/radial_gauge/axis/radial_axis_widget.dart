@@ -91,6 +91,9 @@ class RadialAxisRenderObjectWidget extends LeafRenderObjectWidget {
         gaugeThemeData: gaugeTheme,
         context: context,
         ranges: axis.ranges,
+        visibleLabelsList: axis.visibleLabelsList??[],
+        visibleTickList: axis.visibleTickList??[],
+        axisCornerRadius: axisLineStyle.cornerRadius,
         renderer: renderer,
         backgroundImage: axis.backgroundImage,
         imageStream: axis.backgroundImage
@@ -223,13 +226,17 @@ class RenderRadialAxisWidget extends RenderBox {
       required BuildContext context,
       RadialAxisRenderer? renderer,
       List<GaugeRange>? ranges,
+      this.visibleLabelsList=const [],
+      this.visibleTickList=const [],
       Animation<double>? axisElementsAnimation,
       Animation<double>? axisLineAnimation,
       ImageStream? imageStream,
+      double? axisCornerRadius,
       required ValueNotifier<int> repaintNotifier,
       ImageProvider? backgroundImage})
       : _startAngle = startAngle,
         _endAngle = endAngle,
+        _axisCornerRadius = axisCornerRadius,
         _radiusFactor = radiusFactor,
         _centerX = centerX,
         _centerY = centerY,
@@ -315,7 +322,8 @@ class RenderRadialAxisWidget extends RenderBox {
   late ImageStreamListener _imageStreamListener;
   final ThemeData _themeData;
   final bool _isDarkTheme;
-
+  final List<num> visibleLabelsList;
+  final List<num> visibleTickList;
   late double _radius;
   late double _actualAxisWidth;
   late double _sweepAngle;
@@ -420,6 +428,7 @@ class RenderRadialAxisWidget extends RenderBox {
   /// Gets the endAngle assigned to [RenderRadialAxisWidget].
   double get endAngle => _endAngle;
   double _endAngle;
+  double? _axisCornerRadius;
 
   /// Sets the endAngle for [RenderRadialAxisWidget].
   set endAngle(double value) {
@@ -1795,7 +1804,9 @@ class RenderRadialAxisWidget extends RenderBox {
           tickOffset.startPoint.dy - centerPoint.dy);
       tickOffset.endPoint = Offset(tickOffset.endPoint.dx - centerPoint.dx,
           tickOffset.endPoint.dy - centerPoint.dy);
-      _majorTickOffsets.add(tickOffset);
+      if(visibleTickList.isEmpty || visibleTickList.contains(tickOffset.value.toInt())) {
+        _majorTickOffsets.add(tickOffset);
+      }
       if (isInversed) {
         angleForTicks -= angularSpaceForTicks;
       } else {
@@ -2591,17 +2602,18 @@ class RenderRadialAxisWidget extends RenderBox {
           fontWeight: label.labelStyle.fontWeight ??
               _gaugeThemeData.axisLabelTextStyle?.fontWeight,
         );
+        if(visibleLabelsList.isEmpty || visibleLabelsList.contains(label.value.toInt())) {
+          final TextSpan span =
+          TextSpan(text: label.text, style: axisLabelTextStyle);
 
-        final TextSpan span =
-            TextSpan(text: label.text, style: axisLabelTextStyle);
+          final TextPainter textPainter = TextPainter(
+              text: span,
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.center);
 
-        final TextPainter textPainter = TextPainter(
-            text: span,
-            textDirection: TextDirection.ltr,
-            textAlign: TextAlign.center);
-
-        textPainter.layout();
-        _renderText(canvas, textPainter, label);
+          textPainter.layout();
+          _renderText(canvas, textPainter, label);
+        }
       }
     }
   }

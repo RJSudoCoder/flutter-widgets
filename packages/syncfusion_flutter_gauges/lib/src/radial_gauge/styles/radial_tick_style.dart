@@ -212,6 +212,7 @@ class AxisLineStyle {
       this.thicknessUnit = GaugeSizeUnit.logicalPixel,
       this.color,
       this.gradient,
+      this.cornerRadius,
       this.cornerStyle = CornerStyle.bothFlat,
       this.dashArray})
       : assert(thickness >= 0,
@@ -269,6 +270,8 @@ class AxisLineStyle {
   ///}
   /// ```
   final double thickness;
+
+  final double? cornerRadius;
 
   /// Specifies the color of axis line.
   ///
