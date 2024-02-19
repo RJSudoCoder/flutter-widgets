@@ -91,8 +91,8 @@ class RadialAxisRenderObjectWidget extends LeafRenderObjectWidget {
         gaugeThemeData: gaugeTheme,
         context: context,
         ranges: axis.ranges,
-        visibleLabelsList: axis.visibleLabelsList??[],
-        visibleTickList: axis.visibleTickList??[],
+        visibleLabelsList: axis.visibleLabelsList ?? [],
+        visibleTickList: axis.visibleTickList ?? [],
         axisCornerRadius: axisLineStyle.cornerRadius,
         renderer: renderer,
         backgroundImage: axis.backgroundImage,
@@ -226,8 +226,8 @@ class RenderRadialAxisWidget extends RenderBox {
       required BuildContext context,
       RadialAxisRenderer? renderer,
       List<GaugeRange>? ranges,
-      this.visibleLabelsList=const [],
-      this.visibleTickList=const [],
+      this.visibleLabelsList = const [],
+      this.visibleTickList = const [],
       Animation<double>? axisElementsAnimation,
       Animation<double>? axisLineAnimation,
       ImageStream? imageStream,
@@ -1804,7 +1804,8 @@ class RenderRadialAxisWidget extends RenderBox {
           tickOffset.startPoint.dy - centerPoint.dy);
       tickOffset.endPoint = Offset(tickOffset.endPoint.dx - centerPoint.dx,
           tickOffset.endPoint.dy - centerPoint.dy);
-      if(visibleTickList.isEmpty || visibleTickList.contains(tickOffset.value.toInt())) {
+      if (visibleTickList.isEmpty ||
+          visibleTickList.contains(tickOffset.value.round())) {
         _majorTickOffsets.add(tickOffset);
       }
       if (isInversed) {
@@ -2544,8 +2545,7 @@ class RenderRadialAxisWidget extends RenderBox {
       final Paint tickPaint = Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = minorTickThickness
-      ..strokeCap = StrokeCap.round
-      ;
+        ..strokeCap = StrokeCap.round;
       for (int i = 0; i < length; i++) {
         final TickOffset tickOffset = _minorTickOffsets[i];
         tickPaint.color = useRangeColorForAxis
@@ -2602,9 +2602,10 @@ class RenderRadialAxisWidget extends RenderBox {
           fontWeight: label.labelStyle.fontWeight ??
               _gaugeThemeData.axisLabelTextStyle?.fontWeight,
         );
-        if(visibleLabelsList.isEmpty || visibleLabelsList.contains(label.value.toInt())) {
+        if (visibleLabelsList.isEmpty ||
+            visibleLabelsList.contains(label.value.toInt())) {
           final TextSpan span =
-          TextSpan(text: label.text, style: axisLabelTextStyle);
+              TextSpan(text: label.text, style: axisLabelTextStyle);
 
           final TextPainter textPainter = TextPainter(
               text: span,

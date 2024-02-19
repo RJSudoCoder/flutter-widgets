@@ -613,7 +613,7 @@ class RenderMarkerPointer extends RenderBox {
   Future<void> _renderImage() async {
     final ByteData imageData = await rootBundle.load(imageUrl!);
     final dart_ui.Codec imageCodec =
-        await dart_ui.instantiateImageCodec(imageData.buffer.asUint8List());
+        await dart_ui.instantiateImageCodec(imageData.buffer.asUint8List(),targetWidth: _markerWidth.toInt(),targetHeight: _markerHeight.toInt());
     final dart_ui.FrameInfo frameInfo = await imageCodec.getNextFrame();
     _image = frameInfo.image;
   }
@@ -819,7 +819,7 @@ class RenderMarkerPointer extends RenderBox {
     final Rect rect = Rect.fromLTRB(
         -markerWidth / 2, -markerHeight / 2, markerWidth / 2, markerHeight / 2);
     if (_image != null) {
-      canvas.drawImageNine(_image!, rect, rect, paint);
+      canvas.drawImage(_image!, Offset(rect.left, rect.top), paint);
     }
   }
 
